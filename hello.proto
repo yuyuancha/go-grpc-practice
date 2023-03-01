@@ -1,16 +1,16 @@
 syntax = "proto3";
 
 package hello;
-option go_package = "proto/go-grpc-practice";
+option go_package = "./hello";
 
 message SayHelloRequest {
-    repeated string name = 1;
+    string name = 1;
 }
 
 message SayHelloResponse {
     string message = 1;
 }
 
-service Hello {
+service HelloService {
     rpc SayHello(SayHelloRequest) returns (SayHelloResponse);
 }

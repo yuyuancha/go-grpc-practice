@@ -2,25 +2,22 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"net"
+
+	"github.com/yuyuancha/go-grpc-practice/hello"
+	"google.golang.org/grpc"
 )
 
 func main() {
-	fmt.Println("Hello world")
-	var s = []string{"a", "b", "c", "d"}
-	var i = []int{1, 2, 3, 4, 5}
-	fmt.Println(test(s))
-	fmt.Println(test(i))
+	var gRPCServer = grpc.NewServer()
+	hello.RegisterHelloServiceServer(gRPCServer, new(hello.HelloServer))
 
-	_, err := net.Dial("tcp", "localhost:8080")
+	var listen, err = net.Listen("tcp", ":1234")
 	if err != nil {
-		fmt.Println("err:", err.Error())
-	} else {
-		fmt.Println("successful")
+		log.Fatal(err)
 	}
-}
 
-func test[T any](s []T) ([]T, []T) {
-	var mid = len(s) / 2
-	return s[:mid], s[mid:]
+	fmt.Println("Server started...")
+	log.Fatal(gRPCServer.Serve(listen))
 }
